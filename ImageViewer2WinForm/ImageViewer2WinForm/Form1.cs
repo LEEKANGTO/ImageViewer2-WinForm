@@ -242,11 +242,14 @@ namespace ImageViewer2WinForm
 
         private void InitImageRatio()
         {
-            imgRect.X = 0;
-            imgRect.Y = 0;
-            ratio = 1.0F;
-            imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
-            imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
+            if(Properties.Settings.Default.LoadZoomInit)
+            {
+                imgRect.X = 0;
+                imgRect.Y = 0;
+                ratio = 1.0F;
+                imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
+                imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
+            }
             toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0}", ratio);
         }
 
@@ -257,7 +260,8 @@ namespace ImageViewer2WinForm
 
         private void optionOToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            OptionForm optionForm = new OptionForm();
+            optionForm.ShowDialog();
         }
     }
 }

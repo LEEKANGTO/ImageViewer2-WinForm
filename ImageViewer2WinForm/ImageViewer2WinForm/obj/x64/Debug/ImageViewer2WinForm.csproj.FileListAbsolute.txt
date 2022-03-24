@@ -29,3 +29,4 @@ D:\__StudyProject\ImageViewer2WinForm\ImageViewer2WinForm\ImageViewer2WinForm\bi
 D:\__StudyProject\ImageViewer2WinForm\ImageViewer2WinForm\ImageViewer2WinForm\bin\x64\Debug\OpenCvSharp.Extensions.xml
 D:\__StudyProject\ImageViewer2WinForm\ImageViewer2WinForm\ImageViewer2WinForm\bin\x64\Debug\System.ValueTuple.xml
 D:\__StudyProject\ImageViewer2WinForm\ImageViewer2WinForm\ImageViewer2WinForm\obj\x64\Debug\ImageViewer2WinForm.csprojAssemblyReference.cache
+D:\__StudyProject\ImageViewer2WinForm\ImageViewer2WinForm\ImageViewer2WinForm\obj\x64\Debug\ImageViewer2WinForm.OptionForm.resources
