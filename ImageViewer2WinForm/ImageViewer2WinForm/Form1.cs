@@ -12,8 +12,16 @@ using OpenCvSharp;
 
 namespace ImageViewer2WinForm
 {
+
     public partial class Form1 : Form
     {
+        enum ImageLoadDirection
+        {
+            LOAD_PREV = -1,
+            LOAD_CURRENT,
+            LOAD_NEXT
+        };
+
         private int x1;
         private int y1;
         private bool ImageLoaded = false;
@@ -31,6 +39,9 @@ namespace ImageViewer2WinForm
         private System.Drawing.Point clickPoint;
         private Rectangle imgRect;
 
+        private String rootFolder;
+        private String fileName;
+        private List<String> fileList;
 
         public Form1()
         {
@@ -38,6 +49,7 @@ namespace ImageViewer2WinForm
             InitControl();
             InitMouseEvent();
 
+            fileList = new List<String>();
         }
         public void InitMouseEvent()
         {
@@ -67,8 +79,8 @@ namespace ImageViewer2WinForm
 
                 imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
                 imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
-                imgRect.X = -(int)Math.Round(1.1F * (imgPoint.X - imgRect.X) - imgPoint.X);
-                imgRect.Y = -(int)Math.Round(1.1F * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
+                imgRect.X = -(int)Math.Round(ratio * (imgPoint.X - imgRect.X) - imgPoint.X);
+                imgRect.Y = -(int)Math.Round(ratio * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
             }
             else if (lines < 0)
             {
@@ -77,8 +89,8 @@ namespace ImageViewer2WinForm
 
                 imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
                 imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
-                imgRect.X = -(int)Math.Round(0.9F * (imgPoint.X - imgRect.X) - imgPoint.X);
-                imgRect.Y = -(int)Math.Round(0.9F * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
+                imgRect.X = -(int)Math.Round(ratio * (imgPoint.X - imgRect.X) - imgPoint.X);
+                imgRect.Y = -(int)Math.Round(ratio * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
             }
 
             if (imgRect.X > 0) imgRect.X = 0;
@@ -86,7 +98,7 @@ namespace ImageViewer2WinForm
             if (imgRect.X + imgRect.Width < pictureBoxImage.Width) imgRect.X = pictureBoxImage.Width - imgRect.Width;
             if (imgRect.Y + imgRect.Height < pictureBoxImage.Height) imgRect.Y = pictureBoxImage.Height - imgRect.Height;
             pictureBoxImage.Invalidate();
-            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0}", ratio);
+            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0:F2}x", ratio);
         }
         public void InitControl()
         {
@@ -226,14 +238,49 @@ namespace ImageViewer2WinForm
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 LoadImage(dlg.FileName);
+            }      
+            string[] fileNameSplit = dlg.FileName.Split('\\');
+            for(int i=0; i<fileNameSplit.Count(); i++)
+            {
+                if (i == fileNameSplit.Count()-1)
+                {
+                    fileName = fileNameSplit[i];
+                }else if (i == 0)
+                {
+                    rootFolder = String.Format("{0}", fileNameSplit[i]);
+                }
+                else
+                {
+                    rootFolder = String.Format("{0}\\{1}", rootFolder, fileNameSplit[i]);
+                }
+                
             }
+            toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
+            SetFlieList();
         }
-
-        private void LoadImage(String fileName)
+        private void SetFlieList()
         {
-            image = Cv2.ImRead(fileName, ImreadModes.Unchanged);
+            fileList.Clear();
+            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(rootFolder);
+            string[] fileArr = di.GetFiles().Select(o => o.Name).ToArray();
+            Array.Sort(fileArr, new StringAsNumericComparer());
+            String ext;
+            foreach(String file in fileArr)
+            {
+                ext = System.IO.Path.GetExtension(file.ToLower());
+                if (ext.CompareTo(".jpg") == 0 || ext.CompareTo(".jpeg") == 0 || ext.CompareTo(".bmp") == 0 || ext.CompareTo(".png") == 0)
+                {
+                    fileList.Add(file);
+                }
+            }            
+        }
+        private void LoadImage(String filePath)
+        {
+            image = Cv2.ImRead(filePath, ImreadModes.Unchanged);            
             imageType = image.Type();
             toolStripStatusLabelSize.Text = String.Format("{0}*{1}", image.Width, image.Height);
+            toolStripStatusLabelType.Text = String.Format("{0}", imageType.ToString());
+            toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
             InitImageRatio();
             pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
             ImageLoaded = true;
@@ -250,7 +297,7 @@ namespace ImageViewer2WinForm
                 imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
                 imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
             }
-            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0}", ratio);
+            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0:F2}x", ratio);
         }
 
         private void programExitXToolStripMenuItem_Click(object sender, EventArgs e)
@@ -262,6 +309,41 @@ namespace ImageViewer2WinForm
         {
             OptionForm optionForm = new OptionForm();
             optionForm.ShowDialog();
+        }
+
+        void LoadImageByArrow(ImageLoadDirection type)
+        {
+            int index = fileList.FindIndex(a => a.Contains(fileName));
+            if(type == ImageLoadDirection.LOAD_NEXT)
+            {
+                index += 1;
+                if (index > fileList.Count - 1) index = 0;
+                fileName = fileList[index];
+            }
+            else if(type == ImageLoadDirection.LOAD_PREV)
+            {
+                index -= 1;
+                if (index < 0) index = fileList.Count - 1;
+                fileName = fileList[index];
+
+            }
+            fileName = fileList[index];
+            String fullfilePath = String.Format("{0}\\{1}", rootFolder, fileName);
+            LoadImage(fullfilePath);
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Left:
+                    LoadImageByArrow(ImageLoadDirection.LOAD_PREV);
+                    break;
+                case Keys.Right:
+                    LoadImageByArrow(ImageLoadDirection.LOAD_NEXT);
+                    break;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }

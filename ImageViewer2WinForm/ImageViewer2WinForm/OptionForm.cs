@@ -24,7 +24,7 @@ namespace ImageViewer2WinForm
             if(e.Node.Text == "Image Load")
             {
                 CheckBox chkBox = new CheckBox();
-                String strText = "이미지를 로드할 때 확대 비율을 초기화";
+                String strText = "이미지를 로드할 때 확대 비율 초기화";
                 int textLength = strText.Length * 16;
                 chkBox.Text = strText;
                 chkBox.Name = String.Format("checkBoxLoadZoomInit");

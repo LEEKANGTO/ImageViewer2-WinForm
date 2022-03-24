@@ -32,12 +32,11 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelVer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelPos = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelPixelValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelRatio = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,10 +44,12 @@
             this.programExitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionOToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.toolStripStatusLabelFileName = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.statusStripMain.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxImage
@@ -67,7 +68,7 @@
             // 
             this.buttonLoad.Location = new System.Drawing.Point(6, 6);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(181, 33);
+            this.buttonLoad.Size = new System.Drawing.Size(87, 33);
             this.buttonLoad.TabIndex = 1;
             this.buttonLoad.Text = "Load(&L)...";
             this.buttonLoad.UseVisualStyleBackColor = true;
@@ -77,12 +78,13 @@
             // 
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelVer,
+            this.toolStripStatusLabelFileName,
             this.toolStripStatusLabelSize,
-            this.toolStripStatusLabelRatio,
-            this.toolStripStatusLabel2,
+            this.toolStripStatusLabelType,
             this.toolStripStatusLabelPos,
             this.toolStripStatusLabelPixelValue,
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabelRatio});
             this.statusStripMain.Location = new System.Drawing.Point(0, 506);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Size = new System.Drawing.Size(1055, 24);
@@ -98,11 +100,23 @@
             this.toolStripStatusLabelVer.Size = new System.Drawing.Size(29, 19);
             this.toolStripStatusLabelVer.Text = "Ver";
             // 
-            // toolStripStatusLabel2
+            // toolStripStatusLabelSize
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(416, 19);
-            this.toolStripStatusLabel2.Spring = true;
+            this.toolStripStatusLabelSize.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelSize.Name = "toolStripStatusLabelSize";
+            this.toolStripStatusLabelSize.Size = new System.Drawing.Size(33, 19);
+            this.toolStripStatusLabelSize.Text = "Size";
+            // 
+            // toolStripStatusLabelType
+            // 
+            this.toolStripStatusLabelType.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelType.Name = "toolStripStatusLabelType";
+            this.toolStripStatusLabelType.Size = new System.Drawing.Size(36, 19);
+            this.toolStripStatusLabelType.Text = "Type";
             // 
             // toolStripStatusLabelPos
             // 
@@ -125,33 +139,8 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(416, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(709, 19);
             this.toolStripStatusLabel1.Spring = true;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble;
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.pictureBoxImage, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.buttonLoad, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1055, 482);
-            this.tableLayoutPanel1.TabIndex = 16;
-            // 
-            // toolStripStatusLabelSize
-            // 
-            this.toolStripStatusLabelSize.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabelSize.Name = "toolStripStatusLabelSize";
-            this.toolStripStatusLabelSize.Size = new System.Drawing.Size(33, 19);
-            this.toolStripStatusLabelSize.Text = "Size";
             // 
             // toolStripStatusLabelRatio
             // 
@@ -185,14 +174,14 @@
             // loadLToolStripMenuItem
             // 
             this.loadLToolStripMenuItem.Name = "loadLToolStripMenuItem";
-            this.loadLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadLToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.loadLToolStripMenuItem.Text = "Load(&L)";
             this.loadLToolStripMenuItem.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // programExitXToolStripMenuItem
             // 
             this.programExitXToolStripMenuItem.Name = "programExitXToolStripMenuItem";
-            this.programExitXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.programExitXToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.programExitXToolStripMenuItem.Text = "Program Exit(&X)";
             this.programExitXToolStripMenuItem.Click += new System.EventHandler(this.programExitXToolStripMenuItem_Click);
             // 
@@ -207,9 +196,36 @@
             // optionOToolStripMenuItem1
             // 
             this.optionOToolStripMenuItem1.Name = "optionOToolStripMenuItem1";
-            this.optionOToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.optionOToolStripMenuItem1.Size = new System.Drawing.Size(128, 22);
             this.optionOToolStripMenuItem1.Text = "Option(&O)";
             this.optionOToolStripMenuItem1.Click += new System.EventHandler(this.optionOToolStripMenuItem1_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.pictureBoxImage, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonLoad, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1055, 482);
+            this.tableLayoutPanel1.TabIndex = 16;
+            // 
+            // toolStripStatusLabelFileName
+            // 
+            this.toolStripStatusLabelFileName.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelFileName.Name = "toolStripStatusLabelFileName";
+            this.toolStripStatusLabelFileName.Size = new System.Drawing.Size(61, 19);
+            this.toolStripStatusLabelFileName.Text = "FileName";
             // 
             // Form1
             // 
@@ -221,13 +237,14 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ImageViewer2";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -241,8 +258,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPos;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPixelValue;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelVer;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSize;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRatio;
@@ -252,6 +267,9 @@
         private System.Windows.Forms.ToolStripMenuItem programExitXToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionOToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelType;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFileName;
     }
 }
 
