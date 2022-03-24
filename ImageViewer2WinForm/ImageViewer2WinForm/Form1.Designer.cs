@@ -37,9 +37,18 @@
             this.toolStripStatusLabelPixelValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelRatio = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.programExitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionOToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.statusStripMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBoxImage
@@ -47,10 +56,12 @@
             this.pictureBoxImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxImage.Location = new System.Drawing.Point(6, 49);
             this.pictureBoxImage.Name = "pictureBoxImage";
-            this.pictureBoxImage.Size = new System.Drawing.Size(1043, 451);
+            this.pictureBoxImage.Size = new System.Drawing.Size(1043, 427);
             this.pictureBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxImage.TabIndex = 0;
             this.pictureBoxImage.TabStop = false;
+            this.pictureBoxImage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImage_Paint);
+            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
             // 
             // buttonLoad
             // 
@@ -66,6 +77,8 @@
             // 
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelVer,
+            this.toolStripStatusLabelSize,
+            this.toolStripStatusLabelRatio,
             this.toolStripStatusLabel2,
             this.toolStripStatusLabelPos,
             this.toolStripStatusLabelPixelValue,
@@ -88,7 +101,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(470, 19);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(416, 19);
             this.toolStripStatusLabel2.Spring = true;
             // 
             // toolStripStatusLabelPos
@@ -112,7 +125,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(470, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(416, 19);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // tableLayoutPanel1
@@ -123,13 +136,80 @@
             this.tableLayoutPanel1.Controls.Add(this.pictureBoxImage, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.buttonLoad, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1055, 506);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1055, 482);
             this.tableLayoutPanel1.TabIndex = 16;
+            // 
+            // toolStripStatusLabelSize
+            // 
+            this.toolStripStatusLabelSize.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelSize.Name = "toolStripStatusLabelSize";
+            this.toolStripStatusLabelSize.Size = new System.Drawing.Size(33, 19);
+            this.toolStripStatusLabelSize.Text = "Size";
+            // 
+            // toolStripStatusLabelRatio
+            // 
+            this.toolStripStatusLabelRatio.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelRatio.Name = "toolStripStatusLabelRatio";
+            this.toolStripStatusLabelRatio.Size = new System.Drawing.Size(74, 19);
+            this.toolStripStatusLabelRatio.Text = "Zoom Ratio";
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileFToolStripMenuItem,
+            this.ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1055, 24);
+            this.menuStrip1.TabIndex = 17;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileFToolStripMenuItem
+            // 
+            this.fileFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadLToolStripMenuItem,
+            this.programExitXToolStripMenuItem});
+            this.fileFToolStripMenuItem.Name = "fileFToolStripMenuItem";
+            this.fileFToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.fileFToolStripMenuItem.Text = "File(&F)";
+            // 
+            // loadLToolStripMenuItem
+            // 
+            this.loadLToolStripMenuItem.Name = "loadLToolStripMenuItem";
+            this.loadLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadLToolStripMenuItem.Text = "Load(&L)";
+            this.loadLToolStripMenuItem.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
+            // programExitXToolStripMenuItem
+            // 
+            this.programExitXToolStripMenuItem.Name = "programExitXToolStripMenuItem";
+            this.programExitXToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.programExitXToolStripMenuItem.Text = "Program Exit(&X)";
+            this.programExitXToolStripMenuItem.Click += new System.EventHandler(this.programExitXToolStripMenuItem_Click);
+            // 
+            // ToolStripMenuItem
+            // 
+            this.ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionOToolStripMenuItem1});
+            this.ToolStripMenuItem.Name = "ToolStripMenuItem";
+            this.ToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.ToolStripMenuItem.Text = "Tools(&T)";
+            // 
+            // optionOToolStripMenuItem1
+            // 
+            this.optionOToolStripMenuItem1.Name = "optionOToolStripMenuItem1";
+            this.optionOToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.optionOToolStripMenuItem1.Text = "Option(&O)";
+            this.optionOToolStripMenuItem1.Click += new System.EventHandler(this.optionOToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -138,12 +218,16 @@
             this.ClientSize = new System.Drawing.Size(1055, 530);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStripMain);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "ImageViewer2";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,6 +244,14 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSize;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRatio;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem programExitXToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionOToolStripMenuItem1;
     }
 }
 

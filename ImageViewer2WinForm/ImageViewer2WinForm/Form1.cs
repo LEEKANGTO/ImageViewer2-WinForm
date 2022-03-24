@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,13 +24,70 @@ namespace ImageViewer2WinForm
         private int blue;
         private int gray;
 
+        //https://ella-devblog.tistory.com/6
+        private double ratio = 1.0F;
+        private System.Drawing.Point LastPoint;
+        private System.Drawing.Point imgPoint;
+        private System.Drawing.Point clickPoint;
+        private Rectangle imgRect;
+
+
         public Form1()
         {
             InitializeComponent();
             InitControl();
+            InitMouseEvent();
+
+        }
+        public void InitMouseEvent()
+        {
             InitMouseMoveEvent();
+            InitMouseWheelEvent();
+
         }
 
+        public void InitMouseWheelEvent()
+        {
+            pictureBoxImage.MouseWheel += new MouseEventHandler(PictureBox_MouseWheel);
+            imgPoint = new System.Drawing.Point(pictureBoxImage.Width / 2, pictureBoxImage.Height / 2);
+            imgRect = new Rectangle(0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
+            ratio = 1.0;
+            clickPoint = imgPoint;
+        }
+
+        private void PictureBox_MouseWheel(object sender, MouseEventArgs e)
+        {
+            int lines = e.Delta * SystemInformation.MouseWheelScrollLines / 120;
+            PictureBox pb = (PictureBox)sender;
+
+            if (lines > 0)
+            {
+                ratio *= 1.1F;
+                if (ratio > 100.0) ratio = 100.0f;
+
+                imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
+                imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
+                imgRect.X = -(int)Math.Round(1.1F * (imgPoint.X - imgRect.X) - imgPoint.X);
+                imgRect.Y = -(int)Math.Round(1.1F * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
+            }
+            else if (lines < 0)
+            {
+                ratio *= 0.9F;
+                if (ratio < 1) ratio = 1;
+
+                imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
+                imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
+                imgRect.X = -(int)Math.Round(0.9F * (imgPoint.X - imgRect.X) - imgPoint.X);
+                imgRect.Y = -(int)Math.Round(0.9F * (imgPoint.Y - imgRect.Y) - imgPoint.Y);
+            }
+
+            if (imgRect.X > 0) imgRect.X = 0;
+            if (imgRect.Y > 0) imgRect.Y = 0;
+            if (imgRect.X + imgRect.Width < pictureBoxImage.Width) imgRect.X = pictureBoxImage.Width - imgRect.Width;
+            if (imgRect.Y + imgRect.Height < pictureBoxImage.Height) imgRect.Y = pictureBoxImage.Height - imgRect.Height;
+            pictureBoxImage.Invalidate();
+            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0}", ratio);
+        }
         public void InitControl()
         {
             toolStripStatusLabelVer.Text = String.Format("Ver: {0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -44,22 +102,57 @@ namespace ImageViewer2WinForm
         {
             if (ImageLoaded)
             {
-                this.pictureBoxImage.Cursor = GetPictureBoxRect(this.pictureBoxImage).Contains(e.Location) ? Cursors.Cross : Cursors.Default;
-                ConvertPictureBoxCoordinates(this.pictureBoxImage, out this.x1, out this.y1, e.X, e.Y);
-                this.toolStripStatusLabelPos.Text = String.Format("X: {0} Y: {1} ", x1, y1);
-                if (imageType == MatType.CV_8UC3)
+                if (e.Button == MouseButtons.Left)
                 {
-                    GetImgPixelRGBValue(out this.red, out this.green, out this.blue, x1, y1);
-                    toolStripStatusLabelPixelValue.Text = String.Format("R: {0} G: {1} B: {2}", red, green, blue);
+                    imgRect.X = imgRect.X + (int)Math.Round((double)(e.X - clickPoint.X) / 5);
+                    if (imgRect.X >= 0) imgRect.X = 0;
+                    if (Math.Abs(imgRect.X) >= Math.Abs(imgRect.Width - pictureBoxImage.Width)) imgRect.X = -(imgRect.Width - pictureBoxImage.Width);
+                    imgRect.Y = imgRect.Y + (int)Math.Round((double)(e.Y - clickPoint.Y) / 5);
+                    if (imgRect.Y >= 0) imgRect.Y = 0;
+                    if (Math.Abs(imgRect.Y) >= Math.Abs(imgRect.Height - pictureBoxImage.Height)) imgRect.Y = -(imgRect.Height - pictureBoxImage.Height);
+                    pictureBoxImage.Invalidate();
                 }
-                else if (imageType == MatType.CV_8UC1)
+                else
                 {
-                    GetImgPixelGrayValue(out this.gray, x1, y1);
-                    toolStripStatusLabelPixelValue.Text = String.Format("Gray: {0}", gray);
+                    LastPoint = e.Location;
+                    imgPoint = new System.Drawing.Point(e.X, e.Y);
+                    this.pictureBoxImage.Cursor = GetPictureBoxRect(this.pictureBoxImage).Contains(e.Location) ? Cursors.Cross : Cursors.Default;
+                    ConvertPictureBoxCoordinates(this.pictureBoxImage, out this.x1, out this.y1, e.X, e.Y);
+                    this.toolStripStatusLabelPos.Text = String.Format("X: {0} Y: {1} ", x1, y1);
+                    if (imageType == MatType.CV_8UC3)
+                    {
+                        GetImgPixelRGBValue(out this.red, out this.green, out this.blue, x1, y1);
+                        toolStripStatusLabelPixelValue.Text = String.Format("R: {0} G: {1} B: {2}", red, green, blue);
+                    }
+                    else if (imageType == MatType.CV_8UC1)
+                    {
+                        GetImgPixelGrayValue(out this.gray, x1, y1);
+                        toolStripStatusLabelPixelValue.Text = String.Format("Gray: {0}", gray);
+                    }
                 }
-
             }
         }
+
+        private void pictureBoxImage_Paint(object sender, PaintEventArgs e)
+        {
+            if (pictureBoxImage.Image != null)
+            {
+                e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+                e.Graphics.DrawImage(pictureBoxImage.Image, imgRect);
+                pictureBoxImage.Focus();
+            }
+        }
+
+        private void pictureBoxImage_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                clickPoint = new System.Drawing.Point(e.X, e.Y);
+            }
+        }
+
+
 
         private Rectangle GetPictureBoxRect(PictureBox box)
         {
@@ -140,8 +233,30 @@ namespace ImageViewer2WinForm
         {
             image = Cv2.ImRead(fileName, ImreadModes.Unchanged);
             imageType = image.Type();
+            toolStripStatusLabelSize.Text = String.Format("{0}*{1}", image.Width, image.Height);
+            InitImageRatio();
             pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
             ImageLoaded = true;
+            pictureBoxImage.Invalidate();
+        }
+
+        private void InitImageRatio()
+        {
+            imgRect.X = 0;
+            imgRect.Y = 0;
+            ratio = 1.0F;
+            imgRect.Width = (int)Math.Round(pictureBoxImage.Width * ratio);
+            imgRect.Height = (int)Math.Round(pictureBoxImage.Height * ratio);
+            toolStripStatusLabelRatio.Text = String.Format("Zoom Ratio: {0}", ratio);
+        }
+
+        private void programExitXToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void optionOToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
 
         }
     }
