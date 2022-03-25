@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Image Load");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Environment", new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Image Load");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Environment", new System.Windows.Forms.TreeNode[] {
+            treeNode9});
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Corner");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Algorithm", new System.Windows.Forms.TreeNode[] {
+            treeNode11});
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.treeViewOption = new System.Windows.Forms.TreeView();
             this.groupBoxParmeter = new System.Windows.Forms.GroupBox();
@@ -59,12 +62,17 @@
             this.treeViewOption.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewOption.Location = new System.Drawing.Point(3, 3);
             this.treeViewOption.Name = "treeViewOption";
-            treeNode3.Name = "ImageLoad";
-            treeNode3.Text = "Image Load";
-            treeNode4.Name = "Environment";
-            treeNode4.Text = "Environment";
+            treeNode9.Name = "ImageLoad";
+            treeNode9.Text = "Image Load";
+            treeNode10.Name = "Environment";
+            treeNode10.Text = "Environment";
+            treeNode11.Name = "Corner";
+            treeNode11.Text = "Corner";
+            treeNode12.Name = "Algorithm";
+            treeNode12.Text = "Algorithm";
             this.treeViewOption.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4});
+            treeNode10,
+            treeNode12});
             this.treeViewOption.Size = new System.Drawing.Size(145, 299);
             this.treeViewOption.TabIndex = 1;
             this.treeViewOption.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewOption_AfterSelect);
@@ -114,7 +122,6 @@
             this.Name = "OptionForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Option";
-            this.TopMost = true;
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

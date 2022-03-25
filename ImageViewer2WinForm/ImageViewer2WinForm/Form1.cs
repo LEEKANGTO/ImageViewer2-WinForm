@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
+using Point = OpenCvSharp.Point;
 
 namespace ImageViewer2WinForm
 {
@@ -26,12 +27,14 @@ namespace ImageViewer2WinForm
         private int y1;
         private bool ImageLoaded = false;
         private Mat image = null;
+        private Mat cloneImage = null;
         private MatType imageType;
         private int red;
         private int green;
         private int blue;
         private int gray;
-
+        private int rotateAngle;
+        private int rotateLevel;
         //https://ella-devblog.tistory.com/6
         private double ratio = 1.0F;
         private System.Drawing.Point LastPoint;
@@ -43,6 +46,8 @@ namespace ImageViewer2WinForm
         private String fileName;
         private List<String> fileList;
 
+        
+
         public Form1()
         {
             InitializeComponent();
@@ -50,7 +55,9 @@ namespace ImageViewer2WinForm
             InitMouseEvent();
 
             fileList = new List<String>();
-        }
+            rotateAngle = 0;
+            rotateLevel = 90;
+    }
         public void InitMouseEvent()
         {
             InitMouseMoveEvent();
@@ -238,14 +245,21 @@ namespace ImageViewer2WinForm
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 LoadImage(dlg.FileName);
+                SetFileNames(dlg.FileName);
+                SetFlieList();
             }      
-            string[] fileNameSplit = dlg.FileName.Split('\\');
-            for(int i=0; i<fileNameSplit.Count(); i++)
+        }
+
+        private void SetFileNames(String dlgfileName)
+        {
+            string[] fileNameSplit = dlgfileName.Split('\\');
+            for (int i = 0; i < fileNameSplit.Count(); i++)
             {
-                if (i == fileNameSplit.Count()-1)
+                if (i == fileNameSplit.Count() - 1)
                 {
                     fileName = fileNameSplit[i];
-                }else if (i == 0)
+                }
+                else if (i == 0)
                 {
                     rootFolder = String.Format("{0}", fileNameSplit[i]);
                 }
@@ -253,10 +267,9 @@ namespace ImageViewer2WinForm
                 {
                     rootFolder = String.Format("{0}\\{1}", rootFolder, fileNameSplit[i]);
                 }
-                
+
             }
             toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
-            SetFlieList();
         }
         private void SetFlieList()
         {
@@ -276,7 +289,9 @@ namespace ImageViewer2WinForm
         }
         private void LoadImage(String filePath)
         {
-            image = Cv2.ImRead(filePath, ImreadModes.Unchanged);            
+            image = Cv2.ImRead(filePath, ImreadModes.Unchanged);
+            rotateAngle = 0;
+            cloneImage = image.Clone();
             imageType = image.Type();
             toolStripStatusLabelSize.Text = String.Format("{0}*{1}", image.Width, image.Height);
             toolStripStatusLabelType.Text = String.Format("{0}", imageType.ToString());
@@ -313,6 +328,7 @@ namespace ImageViewer2WinForm
 
         void LoadImageByArrow(ImageLoadDirection type)
         {
+            if (!ImageLoaded) return;
             int index = fileList.FindIndex(a => a.Contains(fileName));
             if(type == ImageLoadDirection.LOAD_NEXT)
             {
@@ -344,6 +360,89 @@ namespace ImageViewer2WinForm
                     break;
             }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void buttonPrevLoad_Click(object sender, EventArgs e)
+        {
+            LoadImageByArrow(ImageLoadDirection.LOAD_PREV);
+        }
+
+        private void buttonNextLoad_Click(object sender, EventArgs e)
+        {
+            LoadImageByArrow(ImageLoadDirection.LOAD_NEXT);
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            if (ImageLoaded)
+            {
+                pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
+            }
+        }
+
+        private void toolStripMenuItemBtnClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)sender;
+            if (ImageLoaded)
+            {
+                if (toolStripMenuItem.Name == "flipVerticallyToolStripMenuItem")
+                {
+                    Cv2.Flip(cloneImage, cloneImage, FlipMode.X);
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                }
+                else if (toolStripMenuItem.Name == "flipHorizontallyToolStripMenuItem")
+                {
+                    Cv2.Flip(cloneImage, cloneImage, FlipMode.Y);
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                }
+                else if (toolStripMenuItem.Name == "rotateClockwiseToolStripMenuItem")
+                {
+                    rotateAngle = -rotateLevel;
+
+                    Point2f centerPoint = new Point2f(cloneImage.Rows / 2, cloneImage.Rows / 2);
+                    Mat rotateMatrix = Cv2.GetRotationMatrix2D(centerPoint, rotateAngle, 1.0);
+                    Cv2.WarpAffine(cloneImage, cloneImage, rotateMatrix, cloneImage.Size());
+
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                }
+                else if (toolStripMenuItem.Name == "rotateCounterClockwiseToolStripMenuItem")
+                {
+                    rotateAngle = rotateLevel;
+
+                    Point2f centerPoint = new Point2f(cloneImage.Rows / 2, cloneImage.Rows / 2);
+                    Mat rotateMatrix = Cv2.GetRotationMatrix2D(centerPoint, rotateAngle, 1.0);
+                    Cv2.WarpAffine(cloneImage, cloneImage, rotateMatrix, cloneImage.Size());
+
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                }
+                else if (toolStripMenuItem.Name == "fASTToolStripMenuItem")
+                {
+                    CornerFast();
+                }
+            }   
+        }
+
+        private void GoodFeaturesToTrack()
+        {
+            Mat gray = cloneImage.Clone();
+            gray.CvtColor(ColorConversionCodes.RGB2GRAY);
+            Point2f[] corners;
+            //GoodFeaturesToTrack(100, 0.01, 5, , 3, true, 0.03);
+            
+        }
+
+        private void CornerFast()
+        {
+            Mat gray = cloneImage.Clone();
+            if(gray.Type() == MatType.CV_8UC3)
+            {
+                gray.CvtColor(ColorConversionCodes.RGB2GRAY);
+            }
+            KeyPoint[] keyPoints;
+            int threshold = Properties.Settings.Default.FastThreshold;
+            keyPoints = Cv2.FAST(gray, threshold);
+            Cv2.DrawKeypoints(gray, keyPoints, cloneImage);
+            pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
         }
     }
 }

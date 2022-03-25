@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelVer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelPos = new System.Windows.Forms.ToolStripStatusLabel();
@@ -44,29 +44,34 @@
             this.programExitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionOToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flipFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flipVerticallyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flipHorizontallyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateCounterClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.toolStripStatusLabelFileName = new System.Windows.Forms.ToolStripStatusLabel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
+            this.pictureBoxImage = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonReset = new System.Windows.Forms.Button();
+            this.buttonNextLoad = new System.Windows.Forms.Button();
+            this.buttonPrevLoad = new System.Windows.Forms.Button();
+            this.cornerDetectCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.goodFeatrueToTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.harrisCornerDetectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.fASTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBoxImage
-            // 
-            this.pictureBoxImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBoxImage.Location = new System.Drawing.Point(6, 49);
-            this.pictureBoxImage.Name = "pictureBoxImage";
-            this.pictureBoxImage.Size = new System.Drawing.Size(1043, 427);
-            this.pictureBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxImage.TabIndex = 0;
-            this.pictureBoxImage.TabStop = false;
-            this.pictureBoxImage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImage_Paint);
-            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(6, 6);
+            this.buttonLoad.Location = new System.Drawing.Point(6, 3);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(87, 33);
             this.buttonLoad.TabIndex = 1;
@@ -99,6 +104,15 @@
             this.toolStripStatusLabelVer.Name = "toolStripStatusLabelVer";
             this.toolStripStatusLabelVer.Size = new System.Drawing.Size(29, 19);
             this.toolStripStatusLabelVer.Text = "Ver";
+            // 
+            // toolStripStatusLabelFileName
+            // 
+            this.toolStripStatusLabelFileName.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelFileName.Name = "toolStripStatusLabelFileName";
+            this.toolStripStatusLabelFileName.Size = new System.Drawing.Size(61, 19);
+            this.toolStripStatusLabelFileName.Text = "FileName";
             // 
             // toolStripStatusLabelSize
             // 
@@ -139,7 +153,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(709, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(736, 19);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // toolStripStatusLabelRatio
@@ -155,7 +169,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileFToolStripMenuItem,
-            this.ToolStripMenuItem});
+            this.ToolStripMenuItem,
+            this.imageIToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1055, 24);
@@ -200,32 +215,168 @@
             this.optionOToolStripMenuItem1.Text = "Option(&O)";
             this.optionOToolStripMenuItem1.Click += new System.EventHandler(this.optionOToolStripMenuItem1_Click);
             // 
+            // imageIToolStripMenuItem
+            // 
+            this.imageIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.flipFToolStripMenuItem,
+            this.rotateRToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.cornerDetectCToolStripMenuItem});
+            this.imageIToolStripMenuItem.Name = "imageIToolStripMenuItem";
+            this.imageIToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.imageIToolStripMenuItem.Text = "Image(&I)";
+            // 
+            // flipFToolStripMenuItem
+            // 
+            this.flipFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.flipVerticallyToolStripMenuItem,
+            this.flipHorizontallyToolStripMenuItem});
+            this.flipFToolStripMenuItem.Name = "flipFToolStripMenuItem";
+            this.flipFToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.flipFToolStripMenuItem.Text = "Flip(&F)";
+            // 
+            // flipVerticallyToolStripMenuItem
+            // 
+            this.flipVerticallyToolStripMenuItem.Name = "flipVerticallyToolStripMenuItem";
+            this.flipVerticallyToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.flipVerticallyToolStripMenuItem.Text = "Flip Vertically";
+            this.flipVerticallyToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            // 
+            // flipHorizontallyToolStripMenuItem
+            // 
+            this.flipHorizontallyToolStripMenuItem.Name = "flipHorizontallyToolStripMenuItem";
+            this.flipHorizontallyToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.flipHorizontallyToolStripMenuItem.Text = "Flip Horizontally";
+            this.flipHorizontallyToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            // 
+            // rotateRToolStripMenuItem
+            // 
+            this.rotateRToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rotateClockwiseToolStripMenuItem,
+            this.rotateCounterClockwiseToolStripMenuItem});
+            this.rotateRToolStripMenuItem.Name = "rotateRToolStripMenuItem";
+            this.rotateRToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateRToolStripMenuItem.Text = "Rotate(&R)";
+            // 
+            // rotateClockwiseToolStripMenuItem
+            // 
+            this.rotateClockwiseToolStripMenuItem.Name = "rotateClockwiseToolStripMenuItem";
+            this.rotateClockwiseToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.rotateClockwiseToolStripMenuItem.Text = "Rotate clockwise";
+            this.rotateClockwiseToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            // 
+            // rotateCounterClockwiseToolStripMenuItem
+            // 
+            this.rotateCounterClockwiseToolStripMenuItem.Name = "rotateCounterClockwiseToolStripMenuItem";
+            this.rotateCounterClockwiseToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.rotateCounterClockwiseToolStripMenuItem.Text = "Rotate counter-clockwise";
+            this.rotateCounterClockwiseToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.pictureBoxImage, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.buttonLoad, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1055, 482);
             this.tableLayoutPanel1.TabIndex = 16;
             // 
-            // toolStripStatusLabelFileName
+            // pictureBoxImage
             // 
-            this.toolStripStatusLabelFileName.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabelFileName.Name = "toolStripStatusLabelFileName";
-            this.toolStripStatusLabelFileName.Size = new System.Drawing.Size(61, 19);
-            this.toolStripStatusLabelFileName.Text = "FileName";
+            this.pictureBoxImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxImage.Location = new System.Drawing.Point(6, 54);
+            this.pictureBoxImage.Name = "pictureBoxImage";
+            this.pictureBoxImage.Size = new System.Drawing.Size(1043, 422);
+            this.pictureBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxImage.TabIndex = 0;
+            this.pictureBoxImage.TabStop = false;
+            this.pictureBoxImage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImage_Paint);
+            this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttonReset);
+            this.panel1.Controls.Add(this.buttonNextLoad);
+            this.panel1.Controls.Add(this.buttonPrevLoad);
+            this.panel1.Controls.Add(this.buttonLoad);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(6, 6);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1043, 39);
+            this.panel1.TabIndex = 1;
+            // 
+            // buttonReset
+            // 
+            this.buttonReset.Location = new System.Drawing.Point(203, 3);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(75, 32);
+            this.buttonReset.TabIndex = 6;
+            this.buttonReset.Text = "Reset(&R)";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
+            // buttonNextLoad
+            // 
+            this.buttonNextLoad.Location = new System.Drawing.Point(151, 3);
+            this.buttonNextLoad.Name = "buttonNextLoad";
+            this.buttonNextLoad.Size = new System.Drawing.Size(46, 33);
+            this.buttonNextLoad.TabIndex = 3;
+            this.buttonNextLoad.Text = ">";
+            this.buttonNextLoad.UseVisualStyleBackColor = true;
+            this.buttonNextLoad.Click += new System.EventHandler(this.buttonNextLoad_Click);
+            // 
+            // buttonPrevLoad
+            // 
+            this.buttonPrevLoad.Location = new System.Drawing.Point(99, 3);
+            this.buttonPrevLoad.Name = "buttonPrevLoad";
+            this.buttonPrevLoad.Size = new System.Drawing.Size(46, 33);
+            this.buttonPrevLoad.TabIndex = 2;
+            this.buttonPrevLoad.Text = "<";
+            this.buttonPrevLoad.UseVisualStyleBackColor = true;
+            this.buttonPrevLoad.Click += new System.EventHandler(this.buttonPrevLoad_Click);
+            // 
+            // cornerDetectCToolStripMenuItem
+            // 
+            this.cornerDetectCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goodFeatrueToTrackToolStripMenuItem,
+            this.harrisCornerDetectorToolStripMenuItem,
+            this.fASTToolStripMenuItem});
+            this.cornerDetectCToolStripMenuItem.Name = "cornerDetectCToolStripMenuItem";
+            this.cornerDetectCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cornerDetectCToolStripMenuItem.Text = "Corner Detect(&C)";
+            // 
+            // goodFeatrueToTrackToolStripMenuItem
+            // 
+            this.goodFeatrueToTrackToolStripMenuItem.Name = "goodFeatrueToTrackToolStripMenuItem";
+            this.goodFeatrueToTrackToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.goodFeatrueToTrackToolStripMenuItem.Text = "Good Featrue to Track";
+            // 
+            // harrisCornerDetectorToolStripMenuItem
+            // 
+            this.harrisCornerDetectorToolStripMenuItem.Name = "harrisCornerDetectorToolStripMenuItem";
+            this.harrisCornerDetectorToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.harrisCornerDetectorToolStripMenuItem.Text = "Harris Corner Detector";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // fASTToolStripMenuItem
+            // 
+            this.fASTToolStripMenuItem.Name = "fASTToolStripMenuItem";
+            this.fASTToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.fASTToolStripMenuItem.Text = "FAST";
+            this.fASTToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
             // 
             // Form1
             // 
@@ -239,20 +390,19 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ImageViewer2";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBoxImage;
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPos;
@@ -270,6 +420,23 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelType;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFileName;
+        private System.Windows.Forms.PictureBox pictureBoxImage;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button buttonNextLoad;
+        private System.Windows.Forms.Button buttonPrevLoad;
+        private System.Windows.Forms.Button buttonReset;
+        private System.Windows.Forms.ToolStripMenuItem imageIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipVerticallyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flipHorizontallyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateRToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateClockwiseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateCounterClockwiseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cornerDetectCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem goodFeatrueToTrackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem harrisCornerDetectorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem fASTToolStripMenuItem;
     }
 }
 

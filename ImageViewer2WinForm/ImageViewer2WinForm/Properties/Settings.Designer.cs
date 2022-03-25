@@ -34,5 +34,17 @@ namespace ImageViewer2WinForm.Properties {
                 this["LoadZoomInit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int FastThreshold {
+            get {
+                return ((int)(this["FastThreshold"]));
+            }
+            set {
+                this["FastThreshold"] = value;
+            }
+        }
     }
 }
