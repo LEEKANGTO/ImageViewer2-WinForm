@@ -292,10 +292,8 @@ namespace ImageViewer2WinForm
             image = Cv2.ImRead(filePath, ImreadModes.Unchanged);
             rotateAngle = 0;
             cloneImage = image.Clone();
-            imageType = image.Type();
-            toolStripStatusLabelSize.Text = String.Format("{0}*{1}", image.Width, image.Height);
-            toolStripStatusLabelType.Text = String.Format("{0}", imageType.ToString());
-            toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
+            imageType = cloneImage.Type();
+            setToolStripText();
             InitImageRatio();
             pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
             ImageLoaded = true;
@@ -377,6 +375,8 @@ namespace ImageViewer2WinForm
             if (ImageLoaded)
             {
                 pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
+                cloneImage = image.Clone();
+                setToolStripText();
             }
         }
 
@@ -424,9 +424,9 @@ namespace ImageViewer2WinForm
 
         private void GoodFeaturesToTrack()
         {
-            Mat gray = cloneImage.Clone();
-            gray.CvtColor(ColorConversionCodes.RGB2GRAY);
-            Point2f[] corners;
+            //Mat gray = cloneImage.Clone();
+            //gray.CvtColor(ColorConversionCodes.RGB2GRAY);
+            //Point2f[] corners;
             //GoodFeaturesToTrack(100, 0.01, 5, , 3, true, 0.03);
             
         }
@@ -434,15 +434,35 @@ namespace ImageViewer2WinForm
         private void CornerFast()
         {
             Mat gray = cloneImage.Clone();
-            if(gray.Type() == MatType.CV_8UC3)
+            if (gray.Type() == MatType.CV_8UC3)
             {
-                gray.CvtColor(ColorConversionCodes.RGB2GRAY);
+                Cv2.CvtColor(cloneImage, gray, ColorConversionCodes.BGR2GRAY);
             }
             KeyPoint[] keyPoints;
             int threshold = Properties.Settings.Default.FastThreshold;
             keyPoints = Cv2.FAST(gray, threshold);
-            Cv2.DrawKeypoints(gray, keyPoints, cloneImage);
+            Scalar scalar = new Scalar(0, 0, 255);
+            Cv2.DrawKeypoints(gray, keyPoints, cloneImage, scalar,DrawMatchesFlags.DrawRichKeypoints);
             pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+            setToolStripText();
+        }
+
+        private void buttonColorToGray_Click(object sender, EventArgs e)
+        {
+            if(image.Type() == MatType.CV_8UC3)
+            {
+                Cv2.CvtColor(image, cloneImage, ColorConversionCodes.BGR2GRAY);                
+                pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                setToolStripText();
+            }            
+        }
+
+        private void setToolStripText()
+        {
+            imageType = cloneImage.Type();
+            toolStripStatusLabelSize.Text = String.Format("{0}*{1}", cloneImage.Width, cloneImage.Height);
+            toolStripStatusLabelType.Text = String.Format("{0}", imageType.ToString());
+            toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
         }
     }
 }

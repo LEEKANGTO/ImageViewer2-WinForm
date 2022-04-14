@@ -51,17 +51,18 @@
             this.rotateRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotateClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotateCounterClockwiseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cornerDetectCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.goodFeatrueToTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.harrisCornerDetectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fASTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonNextLoad = new System.Windows.Forms.Button();
             this.buttonPrevLoad = new System.Windows.Forms.Button();
-            this.cornerDetectCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.goodFeatrueToTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.harrisCornerDetectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.fASTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonColorToGray = new System.Windows.Forms.Button();
             this.statusStripMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -232,7 +233,7 @@
             this.flipVerticallyToolStripMenuItem,
             this.flipHorizontallyToolStripMenuItem});
             this.flipFToolStripMenuItem.Name = "flipFToolStripMenuItem";
-            this.flipFToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.flipFToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.flipFToolStripMenuItem.Text = "Flip(&F)";
             // 
             // flipVerticallyToolStripMenuItem
@@ -255,7 +256,7 @@
             this.rotateClockwiseToolStripMenuItem,
             this.rotateCounterClockwiseToolStripMenuItem});
             this.rotateRToolStripMenuItem.Name = "rotateRToolStripMenuItem";
-            this.rotateRToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rotateRToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.rotateRToolStripMenuItem.Text = "Rotate(&R)";
             // 
             // rotateClockwiseToolStripMenuItem
@@ -271,6 +272,40 @@
             this.rotateCounterClockwiseToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.rotateCounterClockwiseToolStripMenuItem.Text = "Rotate counter-clockwise";
             this.rotateCounterClockwiseToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(162, 6);
+            // 
+            // cornerDetectCToolStripMenuItem
+            // 
+            this.cornerDetectCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goodFeatrueToTrackToolStripMenuItem,
+            this.harrisCornerDetectorToolStripMenuItem,
+            this.fASTToolStripMenuItem});
+            this.cornerDetectCToolStripMenuItem.Name = "cornerDetectCToolStripMenuItem";
+            this.cornerDetectCToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.cornerDetectCToolStripMenuItem.Text = "Corner Detect(&C)";
+            // 
+            // goodFeatrueToTrackToolStripMenuItem
+            // 
+            this.goodFeatrueToTrackToolStripMenuItem.Name = "goodFeatrueToTrackToolStripMenuItem";
+            this.goodFeatrueToTrackToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.goodFeatrueToTrackToolStripMenuItem.Text = "Good Featrue to Track";
+            // 
+            // harrisCornerDetectorToolStripMenuItem
+            // 
+            this.harrisCornerDetectorToolStripMenuItem.Name = "harrisCornerDetectorToolStripMenuItem";
+            this.harrisCornerDetectorToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.harrisCornerDetectorToolStripMenuItem.Text = "Harris Corner Detector";
+            // 
+            // fASTToolStripMenuItem
+            // 
+            this.fASTToolStripMenuItem.Name = "fASTToolStripMenuItem";
+            this.fASTToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.fASTToolStripMenuItem.Text = "FAST";
+            this.fASTToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
             // 
             // tableLayoutPanel1
             // 
@@ -304,6 +339,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonColorToGray);
             this.panel1.Controls.Add(this.buttonReset);
             this.panel1.Controls.Add(this.buttonNextLoad);
             this.panel1.Controls.Add(this.buttonPrevLoad);
@@ -344,39 +380,15 @@
             this.buttonPrevLoad.UseVisualStyleBackColor = true;
             this.buttonPrevLoad.Click += new System.EventHandler(this.buttonPrevLoad_Click);
             // 
-            // cornerDetectCToolStripMenuItem
+            // buttonColorToGray
             // 
-            this.cornerDetectCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.goodFeatrueToTrackToolStripMenuItem,
-            this.harrisCornerDetectorToolStripMenuItem,
-            this.fASTToolStripMenuItem});
-            this.cornerDetectCToolStripMenuItem.Name = "cornerDetectCToolStripMenuItem";
-            this.cornerDetectCToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.cornerDetectCToolStripMenuItem.Text = "Corner Detect(&C)";
-            // 
-            // goodFeatrueToTrackToolStripMenuItem
-            // 
-            this.goodFeatrueToTrackToolStripMenuItem.Name = "goodFeatrueToTrackToolStripMenuItem";
-            this.goodFeatrueToTrackToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.goodFeatrueToTrackToolStripMenuItem.Text = "Good Featrue to Track";
-            // 
-            // harrisCornerDetectorToolStripMenuItem
-            // 
-            this.harrisCornerDetectorToolStripMenuItem.Name = "harrisCornerDetectorToolStripMenuItem";
-            this.harrisCornerDetectorToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.harrisCornerDetectorToolStripMenuItem.Text = "Harris Corner Detector";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
-            // 
-            // fASTToolStripMenuItem
-            // 
-            this.fASTToolStripMenuItem.Name = "fASTToolStripMenuItem";
-            this.fASTToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.fASTToolStripMenuItem.Text = "FAST";
-            this.fASTToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemBtnClick);
+            this.buttonColorToGray.Location = new System.Drawing.Point(285, 4);
+            this.buttonColorToGray.Name = "buttonColorToGray";
+            this.buttonColorToGray.Size = new System.Drawing.Size(90, 32);
+            this.buttonColorToGray.TabIndex = 7;
+            this.buttonColorToGray.Text = "ColorToGray";
+            this.buttonColorToGray.UseVisualStyleBackColor = true;
+            this.buttonColorToGray.Click += new System.EventHandler(this.buttonColorToGray_Click);
             // 
             // Form1
             // 
@@ -437,6 +449,7 @@
         private System.Windows.Forms.ToolStripMenuItem harrisCornerDetectorToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem fASTToolStripMenuItem;
+        private System.Windows.Forms.Button buttonColorToGray;
     }
 }
 
