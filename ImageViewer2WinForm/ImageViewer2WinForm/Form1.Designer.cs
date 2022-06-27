@@ -35,7 +35,8 @@
             this.toolStripStatusLabelSize = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelPos = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabelPixelValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelAvgPixelValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelRatio = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -59,15 +60,20 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButtonFreeLine = new System.Windows.Forms.RadioButton();
+            this.radioButtonStraightLine = new System.Windows.Forms.RadioButton();
+            this.buttonDrawLine = new System.Windows.Forms.Button();
+            this.buttonColorToGray = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonNextLoad = new System.Windows.Forms.Button();
             this.buttonPrevLoad = new System.Windows.Forms.Button();
-            this.buttonColorToGray = new System.Windows.Forms.Button();
             this.statusStripMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             this.panel1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonLoad
@@ -88,7 +94,8 @@
             this.toolStripStatusLabelSize,
             this.toolStripStatusLabelType,
             this.toolStripStatusLabelPos,
-            this.toolStripStatusLabelPixelValue,
+            this.toolStripStatusLabelValue,
+            this.toolStripStatusLabelAvgPixelValue,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabelRatio});
             this.statusStripMain.Location = new System.Drawing.Point(0, 506);
@@ -142,19 +149,28 @@
             this.toolStripStatusLabelPos.Size = new System.Drawing.Size(30, 19);
             this.toolStripStatusLabelPos.Text = "Pos";
             // 
-            // toolStripStatusLabelPixelValue
+            // toolStripStatusLabelValue
             // 
-            this.toolStripStatusLabelPixelValue.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            this.toolStripStatusLabelValue.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabelPixelValue.Name = "toolStripStatusLabelPixelValue";
-            this.toolStripStatusLabelPixelValue.Size = new System.Drawing.Size(41, 19);
-            this.toolStripStatusLabelPixelValue.Text = "Value";
+            this.toolStripStatusLabelValue.Name = "toolStripStatusLabelValue";
+            this.toolStripStatusLabelValue.Size = new System.Drawing.Size(41, 19);
+            this.toolStripStatusLabelValue.Text = "Value";
+            // 
+            // toolStripStatusLabelAvgPixelValue
+            // 
+            this.toolStripStatusLabelAvgPixelValue.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelAvgPixelValue.Name = "toolStripStatusLabelAvgPixelValue";
+            this.toolStripStatusLabelAvgPixelValue.Size = new System.Drawing.Size(62, 19);
+            this.toolStripStatusLabelAvgPixelValue.Text = "AvgValue";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(736, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(674, 19);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // toolStripStatusLabelRatio
@@ -336,9 +352,12 @@
             this.pictureBoxImage.TabStop = false;
             this.pictureBoxImage.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxImage_Paint);
             this.pictureBoxImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseDown);
+            this.pictureBoxImage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxImage_MouseUp);
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.groupBox1);
+            this.panel1.Controls.Add(this.buttonDrawLine);
             this.panel1.Controls.Add(this.buttonColorToGray);
             this.panel1.Controls.Add(this.buttonReset);
             this.panel1.Controls.Add(this.buttonNextLoad);
@@ -350,9 +369,65 @@
             this.panel1.Size = new System.Drawing.Size(1043, 39);
             this.panel1.TabIndex = 1;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.radioButtonFreeLine);
+            this.groupBox1.Controls.Add(this.radioButtonStraightLine);
+            this.groupBox1.Location = new System.Drawing.Point(490, 3);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(185, 36);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Draw Line Mode";
+            // 
+            // radioButtonFreeLine
+            // 
+            this.radioButtonFreeLine.AutoSize = true;
+            this.radioButtonFreeLine.Checked = true;
+            this.radioButtonFreeLine.Location = new System.Drawing.Point(6, 16);
+            this.radioButtonFreeLine.Name = "radioButtonFreeLine";
+            this.radioButtonFreeLine.Size = new System.Drawing.Size(76, 16);
+            this.radioButtonFreeLine.TabIndex = 9;
+            this.radioButtonFreeLine.TabStop = true;
+            this.radioButtonFreeLine.Text = "Free Line";
+            this.radioButtonFreeLine.UseVisualStyleBackColor = true;
+            this.radioButtonFreeLine.CheckedChanged += new System.EventHandler(this.radioButtonFreeLine_CheckedChanged);
+            // 
+            // radioButtonStraightLine
+            // 
+            this.radioButtonStraightLine.AutoSize = true;
+            this.radioButtonStraightLine.Location = new System.Drawing.Point(88, 16);
+            this.radioButtonStraightLine.Name = "radioButtonStraightLine";
+            this.radioButtonStraightLine.Size = new System.Drawing.Size(93, 16);
+            this.radioButtonStraightLine.TabIndex = 10;
+            this.radioButtonStraightLine.TabStop = true;
+            this.radioButtonStraightLine.Text = "Straight Line";
+            this.radioButtonStraightLine.UseVisualStyleBackColor = true;
+            this.radioButtonStraightLine.CheckedChanged += new System.EventHandler(this.radioButtonStraightLine_CheckedChanged);
+            // 
+            // buttonDrawLine
+            // 
+            this.buttonDrawLine.Location = new System.Drawing.Point(381, 4);
+            this.buttonDrawLine.Name = "buttonDrawLine";
+            this.buttonDrawLine.Size = new System.Drawing.Size(103, 32);
+            this.buttonDrawLine.TabIndex = 8;
+            this.buttonDrawLine.Text = "Draw Line OFF";
+            this.buttonDrawLine.UseVisualStyleBackColor = true;
+            this.buttonDrawLine.Click += new System.EventHandler(this.buttonDrawLine_Click);
+            // 
+            // buttonColorToGray
+            // 
+            this.buttonColorToGray.Location = new System.Drawing.Point(285, 4);
+            this.buttonColorToGray.Name = "buttonColorToGray";
+            this.buttonColorToGray.Size = new System.Drawing.Size(90, 32);
+            this.buttonColorToGray.TabIndex = 7;
+            this.buttonColorToGray.Text = "ColorToGray";
+            this.buttonColorToGray.UseVisualStyleBackColor = true;
+            this.buttonColorToGray.Click += new System.EventHandler(this.buttonColorToGray_Click);
+            // 
             // buttonReset
             // 
-            this.buttonReset.Location = new System.Drawing.Point(203, 3);
+            this.buttonReset.Location = new System.Drawing.Point(203, 4);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 32);
             this.buttonReset.TabIndex = 6;
@@ -380,28 +455,23 @@
             this.buttonPrevLoad.UseVisualStyleBackColor = true;
             this.buttonPrevLoad.Click += new System.EventHandler(this.buttonPrevLoad_Click);
             // 
-            // buttonColorToGray
-            // 
-            this.buttonColorToGray.Location = new System.Drawing.Point(285, 4);
-            this.buttonColorToGray.Name = "buttonColorToGray";
-            this.buttonColorToGray.Size = new System.Drawing.Size(90, 32);
-            this.buttonColorToGray.TabIndex = 7;
-            this.buttonColorToGray.Text = "ColorToGray";
-            this.buttonColorToGray.UseVisualStyleBackColor = true;
-            this.buttonColorToGray.Click += new System.EventHandler(this.buttonColorToGray_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1055, 530);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.menuStrip1);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ImageViewer2";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -409,6 +479,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -418,7 +490,7 @@
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.StatusStrip statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPos;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelPixelValue;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAvgPixelValue;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelVer;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSize;
@@ -450,6 +522,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem fASTToolStripMenuItem;
         private System.Windows.Forms.Button buttonColorToGray;
+        private System.Windows.Forms.Button buttonDrawLine;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelValue;
+        private System.Windows.Forms.RadioButton radioButtonStraightLine;
+        private System.Windows.Forms.RadioButton radioButtonFreeLine;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

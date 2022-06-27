@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenCvSharp;
-using Point = OpenCvSharp.Point;
 
 namespace ImageViewer2WinForm
 {
@@ -22,6 +18,9 @@ namespace ImageViewer2WinForm
             LOAD_CURRENT,
             LOAD_NEXT
         };
+
+        const int WM_KEYDOWN = 0x100;
+        const int WM_KEYUP = 0x101;
 
         private int x1;
         private int y1;
@@ -46,7 +45,21 @@ namespace ImageViewer2WinForm
         private String fileName;
         private List<String> fileList;
 
-        
+        private List<Segment> segments = new List<Segment>();       
+        private Segment newSegment = null;
+
+        private bool ControlKeyDown = false;
+        static private int nPenWidth = 5;
+
+        //draw line
+        private List<List<System.Drawing.Point>> pointLists = new List<List<System.Drawing.Point>>();
+        private List<System.Drawing.Point> newPointList = null;
+        private Pen pen = new Pen(Color.FromArgb(0, 255, 0), nPenWidth);
+        private bool bDrawLineMode = false;
+        private int nDrawLineModeSelected = 0;
+        private int nAvgBlue=0;
+        private int nAvgGreen=0;
+        private int nAvgRed=0;
 
         public Form1()
         {
@@ -62,7 +75,6 @@ namespace ImageViewer2WinForm
         {
             InitMouseMoveEvent();
             InitMouseWheelEvent();
-
         }
 
         public void InitMouseWheelEvent()
@@ -121,34 +133,51 @@ namespace ImageViewer2WinForm
         {
             if (ImageLoaded)
             {
-                if (e.Button == MouseButtons.Left)
+                if (newSegment == null)
                 {
-                    imgRect.X = imgRect.X + (int)Math.Round((double)(e.X - clickPoint.X) / 5);
-                    if (imgRect.X >= 0) imgRect.X = 0;
-                    if (Math.Abs(imgRect.X) >= Math.Abs(imgRect.Width - pictureBoxImage.Width)) imgRect.X = -(imgRect.Width - pictureBoxImage.Width);
-                    imgRect.Y = imgRect.Y + (int)Math.Round((double)(e.Y - clickPoint.Y) / 5);
-                    if (imgRect.Y >= 0) imgRect.Y = 0;
-                    if (Math.Abs(imgRect.Y) >= Math.Abs(imgRect.Height - pictureBoxImage.Height)) imgRect.Y = -(imgRect.Height - pictureBoxImage.Height);
-                    pictureBoxImage.Invalidate();
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        imgRect.X = imgRect.X + (int)Math.Round((double)(e.X - clickPoint.X) / 5);
+                        if (imgRect.X >= 0) imgRect.X = 0;
+                        if (Math.Abs(imgRect.X) >= Math.Abs(imgRect.Width - pictureBoxImage.Width)) imgRect.X = -(imgRect.Width - pictureBoxImage.Width);
+                        imgRect.Y = imgRect.Y + (int)Math.Round((double)(e.Y - clickPoint.Y) / 5);
+                        if (imgRect.Y >= 0) imgRect.Y = 0;
+                        if (Math.Abs(imgRect.Y) >= Math.Abs(imgRect.Height - pictureBoxImage.Height)) imgRect.Y = -(imgRect.Height - pictureBoxImage.Height);
+                        pictureBoxImage.Invalidate();
+                    }
+                    else
+                    {
+                        LastPoint = e.Location;
+                        imgPoint = new System.Drawing.Point(e.X, e.Y);
+                        this.pictureBoxImage.Cursor = GetPictureBoxRect(this.pictureBoxImage).Contains(e.Location) ? Cursors.Cross : Cursors.Default;
+                        ConvertPictureBoxCoordinates(this.pictureBoxImage, out this.x1, out this.y1, e.X, e.Y);
+                        this.toolStripStatusLabelPos.Text = String.Format("X: {0} Y: {1} ", x1, y1);
+                        if (imageType == MatType.CV_8UC3)
+                        {
+                            GetImgPixelRGBValue(out this.red, out this.green, out this.blue, x1, y1);
+                            toolStripStatusLabelValue.Text = String.Format("R: {0} G: {1} B: {2}", red, green, blue);
+                        }
+                        else if (imageType == MatType.CV_8UC1)
+                        {
+                            GetImgPixelGrayValue(out this.gray, x1, y1);
+                            toolStripStatusLabelValue.Text = String.Format("Gray: {0}", gray);
+                        }
+                    }
                 }
                 else
                 {
-                    LastPoint = e.Location;
-                    imgPoint = new System.Drawing.Point(e.X, e.Y);
-                    this.pictureBoxImage.Cursor = GetPictureBoxRect(this.pictureBoxImage).Contains(e.Location) ? Cursors.Cross : Cursors.Default;
-                    ConvertPictureBoxCoordinates(this.pictureBoxImage, out this.x1, out this.y1, e.X, e.Y);
-                    this.toolStripStatusLabelPos.Text = String.Format("X: {0} Y: {1} ", x1, y1);
-                    if (imageType == MatType.CV_8UC3)
-                    {
-                        GetImgPixelRGBValue(out this.red, out this.green, out this.blue, x1, y1);
-                        toolStripStatusLabelPixelValue.Text = String.Format("R: {0} G: {1} B: {2}", red, green, blue);
-                    }
-                    else if (imageType == MatType.CV_8UC1)
-                    {
-                        GetImgPixelGrayValue(out this.gray, x1, y1);
-                        toolStripStatusLabelPixelValue.Text = String.Format("Gray: {0}", gray);
-                    }
+                    newSegment.endPoint = e.Location;
+                    pictureBoxImage.Refresh();
                 }
+
+                if (bDrawLineMode)
+                {
+                    if (newPointList != null)
+                    {
+                        newPointList.Add(e.Location);
+                        pictureBoxImage.Refresh();
+                    }
+                }                
             }
         }
 
@@ -156,22 +185,57 @@ namespace ImageViewer2WinForm
         {
             if (pictureBoxImage.Image != null)
             {
-                e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                e.Graphics.Clear(pictureBoxImage.BackColor);
+                //Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                foreach(Segment segment in segments)
+                {
+                    segment.DrawLine(e.Graphics);
+                    //e.Graphics.DrawLines(this.pen, );
+                    
+                }
+                if(newSegment != null)
+                {
+                    newSegment.DrawLine(e.Graphics);
+                }
+                //e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
                 e.Graphics.DrawImage(pictureBoxImage.Image, imgRect);
                 pictureBoxImage.Focus();
+
+                if (bDrawLineMode)
+                {
+                    foreach (List<System.Drawing.Point> pointList in pointLists)
+                    {
+                         e.Graphics.DrawLines(pen, pointList.ToArray());                         
+                    }
+                }                
             }
         }
 
         private void pictureBoxImage_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (ControlKeyDown)
             {
-                clickPoint = new System.Drawing.Point(e.X, e.Y);
+                if (e.Button == MouseButtons.Left)
+                {
+                    newSegment = new Segment(Pens.Blue, e.Location, e.Location);
+                    pictureBoxImage.Refresh();
+                }
             }
+            else
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    clickPoint = new System.Drawing.Point(e.X, e.Y);
+                }
+            }
+            if (bDrawLineMode)
+            {
+                newPointList = new List<System.Drawing.Point>();
+                this.pointLists.Add(newPointList);
+                newPointList.Add(e.Location);
+            }            
         }
-
-
 
         private Rectangle GetPictureBoxRect(PictureBox box)
         {
@@ -216,20 +280,21 @@ namespace ImageViewer2WinForm
             }
 
         }
-        private void GetImgPixelRGBValue(out int red, out int green, out int blue, int x1, int y1)
+        private void GetImgPixelRGBValue(out int red, out int green, out int blue, int x, int y)
         {
             //TypeSpecificMat (faster)
             var mat3 = new Mat<Vec3b>(image);
             var indexer = mat3.GetIndexer();
-            Vec3b color = indexer[y1, x1];
-            byte temp = color.Item0;
-            color.Item0 = color.Item2;
-            color.Item2 = temp;
-            indexer[y1, x1] = color;
+            Vec3b color = indexer[y, x];
 
-            red = color.Item0;
+            //byte temp = color.Item0;
+            //color.Item0 = color.Item2;
+            //color.Item2 = temp;
+            //indexer[y, x] = color;
+
+            red = color.Item2;
             green = color.Item1;
-            blue = color.Item2;
+            blue = color.Item0;
         }
 
         private void GetImgPixelGrayValue(out int gray, int x1, int y1)
@@ -298,6 +363,7 @@ namespace ImageViewer2WinForm
             pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
             ImageLoaded = true;
             pictureBoxImage.Invalidate();
+            pointLists = new List<List<System.Drawing.Point>>();
         }
 
         private void InitImageRatio()
@@ -348,14 +414,17 @@ namespace ImageViewer2WinForm
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            switch (keyData)
+            if (msg.Msg == WM_KEYDOWN)
             {
-                case Keys.Left:
-                    LoadImageByArrow(ImageLoadDirection.LOAD_PREV);
-                    break;
-                case Keys.Right:
-                    LoadImageByArrow(ImageLoadDirection.LOAD_NEXT);
-                    break;
+                switch (keyData)
+                {
+                    case Keys.Left:
+                        LoadImageByArrow(ImageLoadDirection.LOAD_PREV);
+                        break;
+                    case Keys.Right:
+                        LoadImageByArrow(ImageLoadDirection.LOAD_NEXT);
+                        break;
+                }
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -433,28 +502,34 @@ namespace ImageViewer2WinForm
 
         private void CornerFast()
         {
-            Mat gray = cloneImage.Clone();
-            if (gray.Type() == MatType.CV_8UC3)
+            if (ImageLoaded)
             {
-                Cv2.CvtColor(cloneImage, gray, ColorConversionCodes.BGR2GRAY);
+                Mat gray = cloneImage.Clone();
+                if (gray.Type() == MatType.CV_8UC3)
+                {
+                    Cv2.CvtColor(cloneImage, gray, ColorConversionCodes.BGR2GRAY);
+                }
+                KeyPoint[] keyPoints;
+                int threshold = Properties.Settings.Default.FastThreshold;
+                keyPoints = Cv2.FAST(gray, threshold);
+                Scalar scalar = new Scalar(0, 0, 255);
+                Cv2.DrawKeypoints(gray, keyPoints, cloneImage, scalar, DrawMatchesFlags.DrawRichKeypoints);
+                pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                setToolStripText();
             }
-            KeyPoint[] keyPoints;
-            int threshold = Properties.Settings.Default.FastThreshold;
-            keyPoints = Cv2.FAST(gray, threshold);
-            Scalar scalar = new Scalar(0, 0, 255);
-            Cv2.DrawKeypoints(gray, keyPoints, cloneImage, scalar,DrawMatchesFlags.DrawRichKeypoints);
-            pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
-            setToolStripText();
         }
 
         private void buttonColorToGray_Click(object sender, EventArgs e)
         {
-            if(image.Type() == MatType.CV_8UC3)
+            if (ImageLoaded)
             {
-                Cv2.CvtColor(image, cloneImage, ColorConversionCodes.BGR2GRAY);                
-                pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
-                setToolStripText();
-            }            
+                if (image.Type() == MatType.CV_8UC3)
+                {
+                    Cv2.CvtColor(image, cloneImage, ColorConversionCodes.BGR2GRAY);
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(cloneImage);
+                    setToolStripText();
+                }
+            }
         }
 
         private void setToolStripText()
@@ -463,6 +538,114 @@ namespace ImageViewer2WinForm
             toolStripStatusLabelSize.Text = String.Format("{0}*{1}", cloneImage.Width, cloneImage.Height);
             toolStripStatusLabelType.Text = String.Format("{0}", imageType.ToString());
             toolStripStatusLabelFileName.Text = String.Format("{0}", fileName);
+        }
+
+        private void pictureBoxImage_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (newSegment != null)
+            {
+                newSegment.pen = Pens.Red;
+                segments.Add(newSegment);
+            }            
+            newSegment = null;
+
+            if (bDrawLineMode)
+            {
+                if (newPointList != null)
+                {
+                    if (newPointList.Count < 2)
+                    {
+                        pointLists.RemoveAt(pointLists.Count - 1);
+                    }
+                    GetAvgLevelFromLine();
+                }
+                newPointList = null;
+            }            
+
+            pictureBoxImage.Refresh();
+        }
+
+        private void GetAvgLevelFromLine()
+        {
+            if (ImageLoaded)
+            {
+                int nTotalBlue = 0;
+                int nTotalGreen = 0;
+                int nTotalRed = 0;
+                int nCount = 0;
+
+                foreach (List<System.Drawing.Point> pointList in pointLists)
+                {
+                    foreach (System.Drawing.Point point in pointList)
+                    {
+                        if (image.Type() == MatType.CV_8UC3)
+                        {
+                            ConvertPictureBoxCoordinates(this.pictureBoxImage, out int XCvt, out int YCvt, point.X, point.Y);
+                            Vec3b bgrPixel = image.At<Vec3b>(YCvt, XCvt);
+                            int blue = bgrPixel[0];
+                            int green = bgrPixel[1];
+                            int red = bgrPixel[2];
+
+                            nTotalBlue += blue;
+                            nTotalGreen += green;
+                            nTotalRed += red;
+                        }
+                        nCount++;
+                    }
+                }
+                nAvgBlue = nTotalBlue / nCount;
+                nAvgGreen = nTotalGreen / nCount;
+                nAvgRed = nTotalRed / nCount;
+                toolStripStatusLabelAvgPixelValue.Text = string.Format("Avg R: {0} G: {1} B: {2}", nAvgRed, nAvgGreen, nAvgBlue);
+            }
+        }
+
+        private void buttonDrawLine_Click(object sender, EventArgs e)
+        {
+            if(bDrawLineMode== false)
+            {
+                bDrawLineMode = true;
+                buttonDrawLine.Text = "Draw Line ON";
+            }
+            else
+            {
+                bDrawLineMode = false;
+                buttonDrawLine.Text = "Draw Line OFF";
+                pointLists.Clear();
+                if (ImageLoaded)
+                {
+                    String fullfilePath = String.Format("{0}\\{1}", rootFolder, fileName);
+                    LoadImage(fullfilePath);
+                    pictureBoxImage.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
+                    cloneImage = image.Clone();
+                    setToolStripText();
+                }
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.ControlKey)
+            {
+                ControlKeyDown = false;
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.ControlKey)
+            {
+                ControlKeyDown = true;
+            }
+        }
+        private void radioButtonFreeLine_CheckedChanged(object sender, EventArgs e)
+        {
+            nDrawLineModeSelected = 0;
+        }
+
+        private void radioButtonStraightLine_CheckedChanged(object sender, EventArgs e)
+        {
+            nDrawLineModeSelected = 1;
         }
     }
 }
